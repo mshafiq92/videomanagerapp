@@ -1,9 +1,54 @@
-.env 
-venv/
+# Python
 __pycache__/
-*.pyc
-.DS_Store
-.idea/  
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Environment variables
+.env
+.env.*
+
+# IDE / Editors
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs & databases
 *.log
+*.sqlite3
+*.db
+*.pid
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# Build / Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Instance folder (Flask-style apps)
 instance/
+
+# Caches
+.mypy_cache/
+.pyre/
+.pytype/
+__snapshots__/

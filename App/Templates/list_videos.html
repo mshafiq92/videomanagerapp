@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List Videos</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='app/static/css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>📂 All Videos</h1>
+      </header>
+
+      <table class="video-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Time</th>
+
+            <th>URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for video in videos %}
+          <tr>
+            <td>{{ video._id }}</td>
+            <td>{{ video.title }}</td>
+            <td>{{ video.description }}</td>
+            <td>{{ video.time }}</td>
+            <td>
+              <a href="{{ video.url }}" target="_blank">{{ video.url }}</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="back-link">
+        <a href="/" class="btn-secondary">⬅ Back to Dashboard</a>
+      </div>
+    </div>
+  </body>
+</html>

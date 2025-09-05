@@ -1,18 +1,20 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from .routes import video_routes
+from fastapi.templating import Jinja2Templates
+from app.routes import video_routes
 
-app = FastAPI(title="Video Manager App")
+app = FastAPI()
 
-# Templates & static files
-templates = Jinja2Templates(directory="app/templates")
+# Static files (CSS/JS)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-# Include routes
-app.include_router(video_routes.router)
+# Templates
+templates = Jinja2Templates(directory="app/templates")
 
-@app.get("/", response_class=HTMLResponse)
+# Index route
+@app.get("/")
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+# Include video routes
+app.include_router(video_routes.router)
