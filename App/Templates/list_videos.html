@@ -4,10 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>List Videos</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='app/static/css/style.css') }}"
-    />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <style>
+      .copy-btn {
+        cursor: pointer;
+        padding: 2px 6px;
+        background: #444;
+        color: #fff;
+        border-radius: 4px;
+        font-size: 0.8em;
+        margin-left: 5px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -22,14 +30,21 @@
             <th>Title</th>
             <th>Description</th>
             <th>Time</th>
-
             <th>URL</th>
           </tr>
         </thead>
         <tbody>
           {% for video in videos %}
           <tr>
-            <td>{{ video._id }}</td>
+            <td>
+              {{ video._id }}
+              <button
+                class="copy-btn"
+                onclick="copyToClipboard('{{ video._id }}')"
+              >
+                Copy
+              </button>
+            </td>
             <td>{{ video.title }}</td>
             <td>{{ video.description }}</td>
             <td>{{ video.time }}</td>
@@ -41,8 +56,10 @@
         </tbody>
       </table>
 
-      <div class="back-link">
+      <div class="actions">
         <a href="/" class="btn-secondary">⬅ Back to Dashboard</a>
+        <a href="/add" class="btn-primary">➕ Add Video</a>
+        <a href="/update" class="btn-primary">✏️ Updat </a>
       </div>
     </div>
   </body>

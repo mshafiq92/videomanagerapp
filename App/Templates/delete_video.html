@@ -4,28 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Delete Video</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='app/static/css/style.css') }}"
-    />
+    <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>🗑️ Delete Video</h1>
+        <h1>🗑 Delete Video</h1>
       </header>
 
-      <form action="/videos/delete" method="post" class="form-card">
-        <label for="video_id">Video ID</label>
-        <input
-          type="text"
-          id="video_id"
-          name="video_id"
-          placeholder="Enter video ID"
-          required
-        />
+      <form action="/delete" method="post" class="form-container">
+        <label for="id">Video ID</label>
+        <input type="text" id="id" name="id" required />
 
-        <button type="submit" class="btn danger">Delete Video</button>
+        <button type="submit" class="btn-danger">Delete Video</button>
       </form>
 
       <div class="back-link">

@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Update Video</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='app/static/css/style.css') }}"
-    />
+    <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
     <div class="container">
@@ -15,48 +12,23 @@
         <h1>✏️ Update Video</h1>
       </header>
 
-      <form action="/videos/update" method="post" class="form-card">
-        <label for="video_id">Video ID</label>
-        <input
-          type="text"
-          id="video_id"
-          name="video_id"
-          placeholder="Enter video ID"
-          required
-        />
+      <form action="/update" method="post" class="form-container">
+        <label for="id">Video ID</label>
+        <input type="text" id="id" name="id" required />
 
         <label for="title">New Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          placeholder="Enter new title"
-        />
+        <input type="text" id="title" name="title" />
+
         <label for="description">New Description</label>
-        <input type="text" />
-        <input
-          type="text"
-          id="description"
-          name="description"
-          placeholder="Enter new description"
-        />
+        <textarea id="description" name="description"></textarea>
+
         <label for="time">New Time</label>
-        <input
-          type="text"
-          id="time"
-          name="time"
-          placeholder="Enter new time (e.g., 10:00)"
-        />
+        <input type="text" id="time" name="time" />
 
         <label for="url">New URL</label>
-        <input
-          type="url"
-          id="url"
-          name="url"
-          placeholder="https://example.com/video"
-        />
+        <input type="url" id="url" name="url" />
 
-        <button type="submit" class="btn">Update Video</button>
+        <button type="submit" class="btn-primary">Update Video</button>
       </form>
 
       <div class="back-link">
