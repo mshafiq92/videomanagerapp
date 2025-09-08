@@ -1,0 +1,25 @@
+# Kubernetes ConfigMap for Video Dashboard Application
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: video-dashboard-config
+  namespace: default
+data:
+  # Application configuration
+  app-name: "video-dashboard"
+  app-version: "1.0.0"
+
+  # Database configuration
+  database-name: "ytmanager"
+
+  # Application settings
+  log-level: "INFO"
+  environment: "development"
+
+  # Server configuration
+  server-host: "0.0.0.0"
+  server-port: "8000"
+
+  # MongoDB local connection (for local MongoDB deployment)
+  mongo-local-host: "mongodb-service"
+  mongo-local-port: "27017"

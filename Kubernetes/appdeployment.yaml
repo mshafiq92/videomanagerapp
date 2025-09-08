@@ -1,0 +1,134 @@
+# Video Dashboard Application Deployment and Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-dashboard-deployment
+  namespace: default
+  labels:
+    app: video-dashboard
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: video-dashboard
+  template:
+    metadata:
+      labels:
+        app: video-dashboard
+    spec:
+      containers:
+        - name: video-dashboard
+          # Use your local Docker image (build with: docker build -t video-dashboard .)
+          image: video-dashboard:latest
+          imagePullPolicy: Never # Use local image in Minikube
+          ports:
+            - containerPort: 8000
+          env:
+            # Use MongoDB Atlas connection
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: video-dashboard-secrets
+                  key: mongo-uri
+            # Alternative: Use local MongoDB (uncomment below and comment above)
+            # - name: MONGO_URI
+            #   value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb-service:27017/$(DATABASE_NAME)"
+            # - name: MONGO_USERNAME
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: video-dashboard-secrets
+            #       key: mongo-username
+            # - name: MONGO_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: video-dashboard-secrets
+            #       key: mongo-password
+            # - name: DATABASE_NAME
+            #   valueFrom:
+            #     configMapKeyRef:
+            #       name: video-dashboard-config
+            #       key: database-name
+
+            # Application configuration from ConfigMap
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: video-dashboard-config
+                  key: log-level
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: video-dashboard-config
+                  key: environment
+
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          # Resource limits
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+
+---
+# Video Dashboard Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-dashboard-service
+  namespace: default
+spec:
+  selector:
+    app: video-dashboard
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+  type: NodePort # Use NodePort for Minikube access
+
+---
+# Horizontal Pod Autoscaler (Optional)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: video-dashboard-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-dashboard-deployment
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
