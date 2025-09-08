@@ -1,0 +1,17 @@
+# Docker Compose file format version
+version: "3.8"
+
+services:
+  # Main FastAPI application service
+  video-manager:
+    # Build image from Dockerfile in current directory
+    build: .
+    # Map host port 8000 to container port 8000
+    ports:
+      - "8000:8000"
+    # Pass MongoDB Atlas connection string from .env file
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    # Mount local app folder for live code reload during development
+    volumes:
+      - ./app:/app/app
