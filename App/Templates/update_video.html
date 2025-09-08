@@ -3,37 +3,126 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Update Video</title>
+    <title>Edit Video - Video Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>✏️ Update Video</h1>
+        <h1>✏️ Edit Video</h1>
+        <p>
+          Update the video information below. Leave fields empty to keep current
+          values.
+        </p>
       </header>
 
-      <form action="/update" method="post" class="form-container">
-        <label for="id">Video ID</label>
-        <input type="text" id="id" name="id" required />
+      {% if error %}
+      <div class="error-message">
+        <p>❌ {{ error }}</p>
+      </div>
+      {% endif %}
 
-        <label for="title">New Title</label>
-        <input type="text" id="title" name="title" />
+      <form action="/videos/update" method="post" class="form-container">
+        <div class="form-group">
+          <label for="id">Video ID</label>
+          <input
+            type="text"
+            id="id"
+            name="id"
+            value="{{ id or '' }}"
+            placeholder="Enter the video ID to update"
+            required
+          />
+          <small
+            style="
+              color: var(--text-muted);
+              font-size: 0.75rem;
+              margin-top: 4px;
+              display: block;
+            "
+          >
+            💡 You can copy the ID from the video list page
+          </small>
+        </div>
 
-        <label for="description">New Description</label>
-        <textarea id="description" name="description"></textarea>
+        <div class="form-group">
+          <label for="title">New Title (Optional)</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value="{{ title or '' }}"
+            placeholder="Enter new title or leave empty to keep current"
+          />
+        </div>
 
-        <label for="time">New Time</label>
-        <input type="text" id="time" name="time" />
+        <div class="form-group">
+          <label for="description">New Description (Optional)</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Enter new description or leave empty to keep current"
+          >
+{{ description or '' }}</textarea
+          >
+        </div>
 
-        <label for="url">New URL</label>
-        <input type="url" id="url" name="url" />
+        <div class="form-group">
+          <label for="time">New Duration (Optional)</label>
+          <input
+            type="text"
+            id="time"
+            name="time"
+            value="{{ time or '' }}"
+            placeholder="e.g., 10:30, 1h 25m, or leave empty to keep current"
+          />
+        </div>
 
-        <button type="submit" class="btn-primary">Update Video</button>
+        <div class="form-group">
+          <label for="url">New Video URL (Optional)</label>
+          <input
+            type="url"
+            id="url"
+            name="url"
+            value="{{ url or '' }}"
+            placeholder="https://example.com/new-video-link or leave empty"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <span>💾 Update Video</span>
+        </button>
       </form>
 
       <div class="back-link">
-        <a href="/" class="btn-secondary">⬅ Back to Dashboard</a>
+        <a href="/videos" class="btn btn-secondary">📂 Back to Video List</a>
+        <a href="/" class="btn btn-secondary">🏠 Back to Dashboard</a>
       </div>
     </div>
+
+    <script>
+      // Auto-fill ID from URL parameter if present
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get("id");
+        if (videoId) {
+          document.getElementById("id").value = videoId;
+        }
+
+        const form = document.querySelector("form");
+        const submitBtn = document.querySelector('button[type="submit"]');
+
+        form.addEventListener("submit", function () {
+          submitBtn.innerHTML = '<span class="loading"></span> Updating...';
+          submitBtn.disabled = true;
+        });
+      });
+    </script>
   </body>
 </html>

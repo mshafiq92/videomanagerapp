@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Video Manager</title>
+    <title>Video Manager - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="{{ url_for('static', path='css/style.css') }}"
@@ -13,37 +19,49 @@
     <div class="container">
       <header>
         <h1>🎬 Video Manager</h1>
-        <p>Manage your video collection with ease</p>
+        <p>Organize, manage, and discover your video collection with ease</p>
       </header>
 
       <section class="menu">
         <div class="menu-card">
-          <h2>📂 List Videos</h2>
-          <p>View all your saved videos in one place.</p>
-          <a href="/videos" class="btn">Open</a>
+          <h2>📂 Browse Videos</h2>
+          <p>
+            Explore your complete video library with advanced search and
+            filtering options.
+          </p>
+          <a href="/videos" class="btn btn-primary">View Collection</a>
         </div>
 
         <div class="menu-card">
-          <h2>➕ Add Video</h2>
-          <p>Add a new video with title and URL.</p>
-          <a href="/videos/add" class="btn">Open</a>
+          <h2>➕ Add New Video</h2>
+          <p>
+            Quickly add new videos to your collection with detailed metadata and
+            descriptions.
+          </p>
+          <a href="/videos/add" class="btn btn-success">Add Video</a>
         </div>
 
         <div class="menu-card">
-          <h2>✏️ Update Video</h2>
-          <p>Update existing video details by ID.</p>
-          <a href="/videos/update" class="btn">Open</a>
+          <h2>✏️ Edit Videos</h2>
+          <p>
+            Update video information, modify descriptions, and manage your
+            content.
+          </p>
+          <a href="/videos/update" class="btn btn-secondary">Edit Content</a>
         </div>
 
         <div class="menu-card">
-          <h2>🗑️ Delete Video</h2>
-          <p>Remove a video permanently using its ID.</p>
-          <a href="/videos/delete" class="btn">Open</a>
+          <h2>🗑️ Manage Library</h2>
+          <p>
+            Remove outdated content and keep your video library organized and
+            clean.
+          </p>
+          <a href="/videos/delete" class="btn btn-danger">Manage Library</a>
         </div>
       </section>
 
       <footer>
-        <p>© 2025 VideoManagerApp | Built with FastAPI</p>
+        <p>© 2025 Video Manager Dashboard | Powered by FastAPI & MongoDB</p>
       </footer>
     </div>
   </body>

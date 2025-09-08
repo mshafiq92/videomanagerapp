@@ -3,34 +3,98 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Video</title>
+    <title>Add New Video - Video Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
     <div class="container">
       <header>
         <h1>➕ Add New Video</h1>
+        <p>Fill in the details below to add a new video to your collection</p>
       </header>
 
-      <form action="/add" method="post" class="form-container">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title" required />
+      {% if error %}
+      <div class="error-message">
+        <p>❌ {{ error }}</p>
+      </div>
+      {% endif %}
 
-        <label for="description">Description</label>
-        <textarea id="description" name="description" required></textarea>
+      <form action="/videos/add" method="post" class="form-container">
+        <div class="form-group">
+          <label for="title">Video Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value="{{ title or '' }}"
+            placeholder="Enter a descriptive title for your video"
+            required
+          />
+        </div>
 
-        <label for="time">Time</label>
-        <input type="text" id="time" name="time" required />
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Provide a detailed description of the video content"
+            required
+          >
+{{ description or '' }}</textarea
+          >
+        </div>
 
-        <label for="url">URL</label>
-        <input type="url" id="url" name="url" required />
+        <div class="form-group">
+          <label for="time">Duration</label>
+          <input
+            type="text"
+            id="time"
+            name="time"
+            value="{{ time or '' }}"
+            placeholder="e.g., 10:30, 1h 25m, or 5 minutes"
+            required
+          />
+        </div>
 
-        <button type="submit" class="btn-primary">Save Video</button>
+        <div class="form-group">
+          <label for="url">Video URL</label>
+          <input
+            type="url"
+            id="url"
+            name="url"
+            value="{{ url or '' }}"
+            placeholder="https://example.com/video-link"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <span>💾 Save Video</span>
+        </button>
       </form>
 
       <div class="back-link">
-        <a href="/" class="btn-secondary">⬅ Back to Dashboard</a>
+        <a href="/" class="btn btn-secondary">⬅ Back to Dashboard</a>
       </div>
     </div>
+
+    <script>
+      // Add some interactivity
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const submitBtn = document.querySelector('button[type="submit"]');
+
+        form.addEventListener("submit", function () {
+          submitBtn.innerHTML = '<span class="loading"></span> Saving...';
+          submitBtn.disabled = true;
+        });
+      });
+    </script>
   </body>
 </html>

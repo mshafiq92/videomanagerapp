@@ -3,25 +3,113 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Delete Video</title>
+    <title>Delete Video - Video Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>🗑 Delete Video</h1>
+        <h1>🗑️ Delete Video</h1>
+        <p>
+          ⚠️ This action cannot be undone. Please confirm the video ID before
+          proceeding.
+        </p>
       </header>
 
-      <form action="/delete" method="post" class="form-container">
-        <label for="id">Video ID</label>
-        <input type="text" id="id" name="id" required />
+      {% if error %}
+      <div class="error-message">
+        <p>❌ {{ error }}</p>
+      </div>
+      {% endif %}
 
-        <button type="submit" class="btn-danger">Delete Video</button>
+      <form action="/videos/delete" method="post" class="form-container">
+        <div class="form-group">
+          <label for="id">Video ID to Delete</label>
+          <input
+            type="text"
+            id="id"
+            name="id"
+            value="{{ id or '' }}"
+            placeholder="Enter the video ID to delete"
+            required
+          />
+          <small
+            style="
+              color: var(--text-muted);
+              font-size: 0.75rem;
+              margin-top: 4px;
+              display: block;
+            "
+          >
+            💡 You can copy the ID from the video list page
+          </small>
+        </div>
+
+        <div
+          class="warning-box"
+          style="
+            background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+            color: #1f2937;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+            font-weight: 600;
+          "
+        >
+          ⚠️ Warning: This will permanently delete the video from your
+          collection
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-danger"
+          onclick="return confirmDelete()"
+        >
+          <span>🗑️ Delete Video</span>
+        </button>
       </form>
 
       <div class="back-link">
-        <a href="/" class="btn-secondary">⬅ Back to Dashboard</a>
+        <a href="/videos" class="btn btn-secondary">📂 Back to Video List</a>
+        <a href="/" class="btn btn-secondary">🏠 Back to Dashboard</a>
       </div>
     </div>
+
+    <script>
+      // Auto-fill ID from URL parameter if present
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get("id");
+        if (videoId) {
+          document.getElementById("id").value = videoId;
+        }
+      });
+
+      function confirmDelete() {
+        const videoId = document.getElementById("id").value;
+        if (!videoId) {
+          alert("Please enter a video ID first.");
+          return false;
+        }
+
+        return confirm(
+          `Are you absolutely sure you want to delete the video with ID: ${videoId}?\n\nThis action cannot be undone!`
+        );
+      }
+
+      // Add form submission handling
+      document.querySelector("form").addEventListener("submit", function () {
+        const submitBtn = document.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<span class="loading"></span> Deleting...';
+        submitBtn.disabled = true;
+      });
+    </script>
   </body>
 </html>

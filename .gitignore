@@ -20,6 +20,8 @@ ENV/
 .idea/
 *.swp
 *.swo
+.kiro/
+
 
 # OS junk
 .DS_Store

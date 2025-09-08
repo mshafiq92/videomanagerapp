@@ -3,64 +3,234 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Videos</title>
+    <title>Video Collection - Video Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/static/css/style.css" />
-    <style>
-      .copy-btn {
-        cursor: pointer;
-        padding: 2px 6px;
-        background: #444;
-        color: #fff;
-        border-radius: 4px;
-        font-size: 0.8em;
-        margin-left: 5px;
-      }
-    </style>
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>📂 All Videos</h1>
+        <h1>📂 Video Collection</h1>
+        <p>Browse and manage your complete video library</p>
       </header>
 
-      <table class="video-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Time</th>
-            <th>URL</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for video in videos %}
-          <tr>
-            <td>
-              {{ video._id }}
-              <button
-                class="copy-btn"
-                onclick="copyToClipboard('{{ video._id }}')"
-              >
-                Copy
-              </button>
-            </td>
-            <td>{{ video.title }}</td>
-            <td>{{ video.description }}</td>
-            <td>{{ video.time }}</td>
-            <td>
-              <a href="{{ video.url }}" target="_blank">{{ video.url }}</a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      {% if error %}
+      <div class="error-message">
+        <p>❌ {{ error }}</p>
+      </div>
+      {% endif %} {% if videos %}
+      <div class="video-table-container">
+        <table class="video-table">
+          <thead>
+            <tr>
+              <th>Video ID</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Duration</th>
+              <th>Video Link</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for video in videos %}
+            <tr>
+              <td>
+                <code>{{ video._id }}</code>
+                <button
+                  class="copy-btn"
+                  onclick="copyToClipboard('{{ video._id }}')"
+                  title="Copy ID to clipboard"
+                >
+                  📋
+                </button>
+              </td>
+              <td>
+                <strong>{{ video.title }}</strong>
+              </td>
+              <td>
+                <span class="description-text"
+                  >{{ video.description[:100] }}{% if video.description|length >
+                  100 %}...{% endif %}</span
+                >
+              </td>
+              <td>
+                <span class="duration-badge">{{ video.time }}</span>
+              </td>
+              <td>
+                <a href="{{ video.url }}" target="_blank" class="video-link">
+                  🔗 Open Video
+                </a>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    onclick="editVideo('{{ video._id }}')"
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    onclick="deleteVideo('{{ video._id }}', '{{ video.title }}')"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">📹</div>
+        <h3>No Videos Found</h3>
+        <p>Your video collection is empty. Start by adding your first video!</p>
+        <a href="/videos/add" class="btn btn-primary"
+          >➕ Add Your First Video</a
+        >
+      </div>
+      {% endif %}
 
       <div class="actions">
-        <a href="/" class="btn-secondary">⬅ Back to Dashboard</a>
-        <a href="/add" class="btn-primary">➕ Add Video</a>
-        <a href="/update" class="btn-primary">✏️ Updat </a>
+        <a href="/" class="btn btn-secondary">⬅ Back to Dashboard</a>
+        <a href="/videos/add" class="btn btn-success">➕ Add New Video</a>
+        {% if videos %}
+        <a href="/videos/update" class="btn btn-primary">✏️ Edit Video</a>
+        <a href="/videos/delete" class="btn btn-danger">🗑️ Delete Video</a>
+        {% endif %}
       </div>
     </div>
+
+    <script>
+      function copyToClipboard(text) {
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            // Create a temporary notification
+            const notification = document.createElement("div");
+            notification.textContent = "✅ ID copied to clipboard!";
+            notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            font-weight: 600;
+          `;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+              notification.remove();
+            }, 2000);
+          })
+          .catch(() => {
+            alert("Failed to copy ID: " + text);
+          });
+      }
+
+      function editVideo(videoId) {
+        // For now, redirect to update page with ID pre-filled
+        window.location.href = `/videos/update?id=${videoId}`;
+      }
+
+      function deleteVideo(videoId, videoTitle) {
+        if (
+          confirm(
+            `Are you sure you want to delete "${videoTitle}"?\n\nThis action cannot be undone.`
+          )
+        ) {
+          // For now, redirect to delete page with ID pre-filled
+          window.location.href = `/videos/delete?id=${videoId}`;
+        }
+      }
+    </script>
+
+    <style>
+      .video-table-container {
+        overflow-x: auto;
+        margin-bottom: var(--spacing-xl);
+      }
+
+      .description-text {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        line-height: 1.4;
+      }
+
+      .duration-badge {
+        background: var(--primary-color);
+        color: white;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .video-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .video-link:hover {
+        color: var(--accent-color);
+        text-decoration: underline;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: var(--spacing-xs);
+      }
+
+      .btn-sm {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.75rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: var(--spacing-2xl);
+        background: var(--bg-card);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border-color);
+        margin: var(--spacing-xl) 0;
+      }
+
+      .empty-icon {
+        font-size: 4rem;
+        margin-bottom: var(--spacing-lg);
+      }
+
+      .empty-state h3 {
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-md);
+      }
+
+      .empty-state p {
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-lg);
+      }
+
+      code {
+        background: var(--bg-input);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-family: "Monaco", "Menlo", monospace;
+        font-size: 0.75rem;
+        color: var(--accent-color);
+      }
+    </style>
   </body>
 </html>
