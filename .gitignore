@@ -109,3 +109,5 @@ instance/
 .pyre/
 .pytype/
 __snapshots__/
+
+.kubernetes/
