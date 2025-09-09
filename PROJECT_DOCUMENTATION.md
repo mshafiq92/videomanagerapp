@@ -1,5 +1,8 @@
 # Video Dashboard Application - Complete Project Documentation
 
+## �  Security Notice
+**IMPORTANT**: This documentation contains placeholder credentials marked with `<>` brackets. Never commit actual credentials to version control. Always replace placeholders with your actual values in local configuration files that are excluded by `.gitignore`.
+
 ## 📋 Table of Contents
 
 1. [Project Overview](#project-overview)
@@ -215,9 +218,12 @@ VideoManagerApp/
 4. **Configure Environment**
 
    ```bash
-   # Create .env file
-   echo 'MONGO_URI="your-mongodb-atlas-connection-string"' > .env
+   # Create .env file with your actual MongoDB Atlas connection string
+   # Replace <USERNAME>, <PASSWORD>, <CLUSTER>, and <DATABASE> with your actual values
+   echo 'MONGO_URI="mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.mongodb.net/<DATABASE>?retryWrites=true&w=majority"' > .env
    ```
+   
+   **⚠️ Security Note**: Never commit the `.env` file to version control. It's already excluded in `.gitignore`.
 
 5. **Run the Application**
 
@@ -342,10 +348,10 @@ metadata:
 type: Opaque
 stringData:
   # MongoDB Atlas connection string (plain text - Kubernetes will encode automatically)
-  mongo-uri: "mongodb+srv://username:password@cluster.mongodb.net/yourdatabasename"
+  mongo-uri: "mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.mongodb.net/<DATABASE>?retryWrites=true&w=majority"
   # MongoDB credentials for local MongoDB (if using local instead of Atlas)
-  mongo-username: "your username "
-  mongo-password: "your password"
+  mongo-username: "<LOCAL_MONGO_USERNAME>"
+  mongo-password: "<LOCAL_MONGO_PASSWORD>"
 ```
 
 #### 2. ConfigMap (configmap.yaml)
@@ -385,6 +391,14 @@ docker build -t video-dashboard:latest .
 ```
 
 **Deploy to Kubernetes:**
+
+**⚠️ Security Setup First:**
+```bash
+# 1. Create your actual secrets.yaml from the template
+# Replace all <PLACEHOLDER> values with your actual credentials
+# 2. Ensure secrets.yaml is in .gitignore (already configured)
+# 3. Never commit actual credentials to version control
+```
 
 ```bash
 # Apply configurations
@@ -521,7 +535,7 @@ minikube delete
 
 ```bash
 # MongoDB Atlas Connection
-MONGO_URI="mongodb+srv://username:password@cluster.mongodb.net/yourdatabasename?retryWrites=true&w=majority"
+MONGO_URI/connection ="mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.mongodb.net/<DATABASE>?retryWrites=true&w=majority"
 
 # Optional: Application Settings
 LOG_LEVEL="INFO"
