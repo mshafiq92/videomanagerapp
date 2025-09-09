@@ -342,10 +342,10 @@ metadata:
 type: Opaque
 stringData:
   # MongoDB Atlas connection string (plain text - Kubernetes will encode automatically)
-  mongo-uri: "mongodb+srv://username:password@cluster.mongodb.net/ytmanager"
+  mongo-uri: "mongodb+srv://username:password@cluster.mongodb.net/yourdatabasename"
   # MongoDB credentials for local MongoDB (if using local instead of Atlas)
-  mongo-username: "admin"
-  mongo-password: "password123"
+  mongo-username: "your username "
+  mongo-password: "your password"
 ```
 
 #### 2. ConfigMap (configmap.yaml)
@@ -521,7 +521,7 @@ minikube delete
 
 ```bash
 # MongoDB Atlas Connection
-MONGO_URI="mongodb+srv://username:password@cluster.mongodb.net/ytmanager?retryWrites=true&w=majority"
+MONGO_URI="mongodb+srv://username:password@cluster.mongodb.net/yourdatabasename?retryWrites=true&w=majority"
 
 # Optional: Application Settings
 LOG_LEVEL="INFO"
@@ -762,7 +762,6 @@ kubectl logs -f <pod-name>
 
 - **Database Indexing**: Add indexes for frequently queried fields
 - **Connection Pooling**: Configure appropriate pool sizes
-- **Caching**: Implement Redis for session/data caching
 - **CDN**: Use CDN for static assets
 - **Load Balancing**: Kubernetes service handles load distribution
 
@@ -785,7 +784,6 @@ kubectl logs -f <pod-name>
 
 - **CI/CD Pipeline**: Automated testing and deployment
 - **Blue-Green Deployment**: Zero-downtime deployments
-- **Rollback Strategy**: Quick rollback capabilities
 - **Environment Separation**: Dev, staging, and production environments
 
 ### Backup & Recovery
